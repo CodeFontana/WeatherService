@@ -30,7 +30,6 @@ namespace WeatherServiceApp
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.Configure<OpenWeather>(Configuration.GetSection("OpenWeather"));
             services.AddHttpClient<CurrentWeatherService>()
                 .AddTransientHttpErrorPolicy(builder =>
                     builder.WaitAndRetryAsync(5, retryAttempt =>

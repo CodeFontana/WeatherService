@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
-using WeatherServiceApp.Models;
+using WeatherConsoleUI.Models;
 
-namespace WeatherServiceApp.Services
+namespace WeatherConsoleUI.Services
 {
     public class CurrentWeatherService
     {
@@ -24,24 +24,17 @@ namespace WeatherServiceApp.Services
         }
 
         private record Weather(string description);
-
         private record Main(decimal temp);
-
         private record Forecast(Weather[] weather, Main main);
 
-        public async Task<CurrentWeatherModel> GetCurrentWeatherAsync(string cityName)
+        public async Task<CurrentWeatherModel> GetCurrentWeatherAsync(string cityName, string state)
         {
-            if (string.IsNullOrWhiteSpace(cityName))
-            {
-                return null;
-            }
-            
             string baseUrl = _configuration.GetValue<string>("OpenWeatherMap:Host");
             string apiKey = _configuration.GetValue<string>("OpenWeatherMap:ApiKey");
 
             Forecast apiResult = await _httpClient
                 .GetFromJsonAsync<Forecast>(
-                $"https://{baseUrl}/data/2.5/weather?q={cityName}&appid={apiKey}&units=metric");
+                $"https://{baseUrl}/data/2.5/weather?q={cityName},{state}&appid={apiKey}&units=metric");
 
             CurrentWeatherModel curWeather = new()
             {

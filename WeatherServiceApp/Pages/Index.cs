@@ -10,7 +10,7 @@ namespace WeatherServiceApp.Pages
 {
     public partial class Index
     {
-        private CurrentWeather _current;
+        private CurrentWeatherModel _current;
         private string _city = "Center Moriches";
 
         [Inject]
