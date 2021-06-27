@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>e861724d-e062-41b0-9d22-87f0c20acb78</UserSecretsId>
+    <StartupObject>WeatherServiceApp.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
