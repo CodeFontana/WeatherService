@@ -10,7 +10,7 @@ namespace SimpleConsoleUI
     {
         static async Task Main(string[] args)
         {
-            string apiKey = "6cb804580cbb60e243edce26b0d516bf";
+            string apiKey = "<API key from openweathermap.org>";
             string city = "Center Moriches";
             string state = "New York";
 
