@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace WeatherServiceApp.Models
 {
-    public class CurrentWeatherModel
+    public class CurrentWeatherResultModel
     {
-        public DateTime Date { get; set; }
         public decimal TemperatureC { get; set; }
         public decimal TemperatureF { get; set; }
         public string Summary { get; set; }

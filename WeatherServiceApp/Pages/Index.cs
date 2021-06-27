@@ -10,15 +10,15 @@ namespace WeatherServiceApp.Pages
 {
     public partial class Index
     {
-        private CurrentWeatherModel _current;
-        private string _city = "Center Moriches";
+        private CurrentWeatherRequestModel _request = new();
+        private CurrentWeatherResultModel result;
 
         [Inject]
         public CurrentWeatherService ForecastService { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        private async Task HandleValidSubmit()
         {
-            _current = await ForecastService.GetCurrentWeatherAsync(_city);
+            result = await ForecastService.GetCurrentWeatherAsync(_request.City, _request.State);
         }
     }
 }
