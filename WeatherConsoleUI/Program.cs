@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using WeatherConsoleUI.Services;
 
@@ -15,33 +18,35 @@ class Program
         string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         bool isDevelopment = string.IsNullOrEmpty(env) || env.ToLower() == "development";
 
-        var builder = new ConfigurationBuilder()
-            .AddJsonFile($"appsettings.json", true, true)
-            .AddJsonFile($"appsettings.{env}.json", true, true)
-            .AddEnvironmentVariables();
+        await Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration(config =>
+            {
+                config.SetBasePath(Directory.GetCurrentDirectory());
+                config.AddJsonFile($"appsettings.json", true, true);
+                config.AddJsonFile($"appsettings.{env}.json", true, true);
+                config.AddEnvironmentVariables();
 
-        if (isDevelopment)
-        {
-            builder.AddUserSecrets<Program>();
-        }
-
-        Configuration = builder.Build();
-
-        IServiceCollection services = new ServiceCollection();
-        services.AddSingleton<IConfiguration>(Configuration);
-        services.AddHttpClient<CurrentWeatherService>();
-        services.AddTransient<WeatherApp>();
-        services.BuildServiceProvider();
-
-        ServiceProvider serviceProvider = services.BuildServiceProvider();
-
-        try
-        {
-            await serviceProvider.GetService<WeatherApp>().Run();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Exception: { e.Message }");
-        }
+                if (isDevelopment)
+                {
+                    config.AddUserSecrets<Program>(optional: true);
+                }
+            })
+            .ConfigureServices((hostContext, services) =>
+            {
+                services.AddHttpClient<CurrentWeatherService>();
+                services.AddHostedService<WeatherApp>();
+            })
+            .ConfigureLogging((hostContext, config) =>
+            {
+                config.ClearProviders();
+                config.AddSimpleConsole(options =>
+                {
+                    options.SingleLine = false;
+                    options.TimestampFormat = "MM/dd/yyyy HH:mm:ss ";
+                });
+                config.SetMinimumLevel(LogLevel.Debug);
+                config.AddFilter("Microsoft", LogLevel.None);
+            })
+            .RunConsoleAsync();
     }
 }
