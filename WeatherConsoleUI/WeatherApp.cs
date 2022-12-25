@@ -34,7 +34,9 @@ public class WeatherApp : IHostedService
         {
             try
             {
-                await Run();
+                await Task.Yield(); // https://github.com/dotnet/runtime/issues/36063
+                await Task.Delay(1000); // Additional delay for Microsoft.Hosting.Lifetime messages
+                await ExecuteAsync();
             }
             catch (Exception ex)
             {
@@ -54,7 +56,7 @@ public class WeatherApp : IHostedService
         return Task.CompletedTask;
     }
 
-    public async Task Run()
+    public async Task ExecuteAsync()
     {
         CurrentWeatherModel curWeather = await _currentWeatherService.GetCurrentWeatherAsync("Center Moriches", "New York");
         Console.WriteLine(JsonSerializer.Serialize(curWeather, new JsonSerializerOptions { WriteIndented = true }));
