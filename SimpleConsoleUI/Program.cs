@@ -13,10 +13,9 @@ HttpRequestMessage request = new()
     RequestUri = new Uri($"https://api.openweathermap.org/data/2.5/weather?q={city},{state}&appid={apiKey}&units=imperial"),
 };
 
-using (HttpClient client = new())
-{
-    using (HttpResponseMessage response = await client.SendAsync(request))
-    {
+using HttpClient client = new();
+using HttpResponseMessage response = await client.SendAsync(request);
+
         if (response.IsSuccessStatusCode)
         {
             object body = await response.Content.ReadFromJsonAsync<object>();
