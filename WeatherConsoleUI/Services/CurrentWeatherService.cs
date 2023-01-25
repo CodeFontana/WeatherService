@@ -12,9 +12,8 @@ public class CurrentWeatherService
     private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
 
-    public CurrentWeatherService(
-        HttpClient httpClient,
-        IConfiguration configuration)
+    public CurrentWeatherService(HttpClient httpClient,
+                                 IConfiguration configuration)
     {
         _httpClient = httpClient;
         _configuration = configuration;
@@ -28,10 +27,9 @@ public class CurrentWeatherService
     {
         string baseUrl = _configuration.GetValue<string>("OpenWeatherMap:Host");
         string apiKey = _configuration.GetValue<string>("OpenWeatherMap:ApiKey");
+        string requestUri = $"https://{baseUrl}/data/2.5/weather?q={cityName},{state}&appid={apiKey}&units=metric";
 
-        Forecast apiResult = await _httpClient
-            .GetFromJsonAsync<Forecast>(
-            $"https://{baseUrl}/data/2.5/weather?q={cityName},{state}&appid={apiKey}&units=metric");
+        Forecast apiResult = await _httpClient.GetFromJsonAsync<Forecast>(requestUri);
 
         CurrentWeatherModel curWeather = new()
         {
