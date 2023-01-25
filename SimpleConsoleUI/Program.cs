@@ -16,14 +16,12 @@ HttpRequestMessage request = new()
 using HttpClient client = new();
 using HttpResponseMessage response = await client.SendAsync(request);
 
-        if (response.IsSuccessStatusCode)
-        {
-            object body = await response.Content.ReadFromJsonAsync<object>();
-            Console.WriteLine(JsonSerializer.Serialize<object>(body, new JsonSerializerOptions { WriteIndented = true }));
-        }
-        else
-        {
-            Console.WriteLine($"Request failed[{ response.StatusCode }]: { response.ReasonPhrase }");
-        }
-    }
+if (response.IsSuccessStatusCode)
+{
+    object body = await response.Content.ReadFromJsonAsync<object>();
+    Console.WriteLine(JsonSerializer.Serialize<object>(body, new JsonSerializerOptions { WriteIndented = true }));
+}
+else
+{
+    Console.WriteLine($"Request failed[{ response.StatusCode }]: { response.ReasonPhrase }");
 }
