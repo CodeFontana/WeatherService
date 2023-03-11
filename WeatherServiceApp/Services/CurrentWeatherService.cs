@@ -1,11 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using WeatherServiceApp.Models;
@@ -17,9 +13,8 @@ namespace WeatherServiceApp.Services
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
 
-        public CurrentWeatherService(
-            HttpClient httpClient,
-            IConfiguration configuration)
+        public CurrentWeatherService(HttpClient httpClient,
+                                     IConfiguration configuration)
         {
             _httpClient = httpClient;
             _configuration = configuration;
