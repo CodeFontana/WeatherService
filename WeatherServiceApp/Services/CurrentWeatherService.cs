@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Globalization;
-using System.Text.Json;
+﻿using System.Globalization;
 using WeatherServiceApp.Interfaces;
 using WeatherServiceApp.Models;
 
@@ -11,7 +9,7 @@ public class CurrentWeatherService : ICurrentWeatherService
     private readonly IConfiguration _configuration;
     private readonly IHttpClientFactory _httpClientFactory;
 
-    public CurrentWeatherService(IConfiguration configuration, 
+    public CurrentWeatherService(IConfiguration configuration,
                                  IHttpClientFactory httpClientFactory)
     {
         _configuration = configuration;
