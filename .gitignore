@@ -338,4 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
-/WeatherServiceApp/appsettings.Development.json
+
+# Untrack Development appsettings file
+appsettings.Development.json
