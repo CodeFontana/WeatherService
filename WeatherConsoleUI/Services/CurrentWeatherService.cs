@@ -19,9 +19,9 @@ public class CurrentWeatherService
         _configuration = configuration;
     }
 
-    private record Weather(string description);
-    private record Main(decimal temp);
-    private record Forecast(Weather[] weather, Main main);
+    private record Weather(string Description);
+    private record Main(decimal Temp);
+    private record Forecast(Weather[] Weather, Main Main);
 
     public async Task<CurrentWeatherModel> GetCurrentWeatherAsync(string cityName, string state)
     {
@@ -34,9 +34,9 @@ public class CurrentWeatherService
         CurrentWeatherModel curWeather = new()
         {
             Date = DateTime.Now,
-            TemperatureC = Math.Round(apiResult.main.temp),
-            TemperatureF = 32 + Math.Round(apiResult.main.temp / (decimal)0.5556, 0),
-            Summary = apiResult.weather[0]?.description
+            TemperatureC = Math.Round(apiResult.Main.Temp),
+            TemperatureF = 32 + Math.Round(apiResult.Main.Temp / (decimal)0.5556, 0),
+            Summary = apiResult.Weather[0]?.Description
         };
 
         return curWeather;

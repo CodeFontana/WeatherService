@@ -16,11 +16,9 @@ public class CurrentWeatherService : ICurrentWeatherService
         _httpClientFactory = httpClientFactory;
     }
 
-    private record Weather(string description);
-
-    private record Main(decimal temp);
-
-    private record CurrentWeather(Weather[] weather, Main main);
+    private record Weather(string Description);
+    private record Main(decimal Temp);
+    private record CurrentWeather(Weather[] Weather, Main Main);
 
     public async Task<CurrentWeatherResultModel> GetCurrentWeatherAsync(string city, string state = null)
     {
@@ -41,9 +39,9 @@ public class CurrentWeatherService : ICurrentWeatherService
         TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
         CurrentWeatherResultModel curWeather = new()
         {
-            TemperatureC = Math.Round(result.main.temp),
-            TemperatureF = 32 + Math.Round(result.main.temp / (decimal)0.5556, 0),
-            Summary = textInfo.ToTitleCase(result.weather[0]?.description)
+            TemperatureC = Math.Round(result.Main.Temp),
+            TemperatureF = 32 + Math.Round(result.Main.Temp / (decimal)0.5556, 0),
+            Summary = textInfo.ToTitleCase(result.Weather[0]?.Description)
         };
 
         return curWeather;
