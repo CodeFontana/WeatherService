@@ -55,6 +55,8 @@ public class WeatherApp : IHostedService
     public async Task ExecuteAsync()
     {
         CurrentWeatherModel curWeather = await _currentWeatherService.GetCurrentWeatherAsync("Center Moriches", "New York");
-        Console.WriteLine(JsonSerializer.Serialize(curWeather, new JsonSerializerOptions { WriteIndented = true }));
+        _logger.LogInformation("{message}", JsonSerializer.Serialize(curWeather, new JsonSerializerOptions { WriteIndented = true }));
+        _logger.LogInformation("Press any key to exit...");
+        Console.ReadLine();
     }
 }
