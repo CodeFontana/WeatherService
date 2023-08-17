@@ -13,17 +13,14 @@ namespace WeatherConsoleUI;
 public class WeatherApp : IHostedService
 {
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
-    private readonly IConfiguration _config;
     private readonly ILogger<WeatherApp> _logger;
     private readonly CurrentWeatherService _currentWeatherService;
 
     public WeatherApp(IHostApplicationLifetime hostApplicationLifetime,
-                      IConfiguration configuration,
                       ILogger<WeatherApp> logger,
                       CurrentWeatherService currentWeatherService)
     {
         _hostApplicationLifetime = hostApplicationLifetime;
-        _config = configuration;
         _logger = logger;
         _currentWeatherService = currentWeatherService;
     }
