@@ -18,9 +18,9 @@ public class WeatherApp : IHostedService
     private readonly CurrentWeatherService _currentWeatherService;
 
     public WeatherApp(IHostApplicationLifetime hostApplicationLifetime,
-                     IConfiguration configuration,
-                     ILogger<WeatherApp> logger, 
-                     CurrentWeatherService currentWeatherService)
+                      IConfiguration configuration,
+                      ILogger<WeatherApp> logger,
+                      CurrentWeatherService currentWeatherService)
     {
         _hostApplicationLifetime = hostApplicationLifetime;
         _config = configuration;
