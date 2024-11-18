@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using WeatherConsoleUI.Models;
 
 namespace WeatherConsoleUI.Services;
@@ -25,11 +25,16 @@ public class CurrentWeatherService
 
     public async Task<CurrentWeatherModel> GetCurrentWeatherAsync(string cityName, string state)
     {
-        string baseUrl = _configuration.GetValue<string>("OpenWeatherMap:Host");
-        string apiKey = _configuration.GetValue<string>("OpenWeatherMap:ApiKey");
+        string? baseUrl = _configuration.GetValue<string>("OpenWeatherMap:Host");
+        string? apiKey = _configuration.GetValue<string>("OpenWeatherMap:ApiKey");
         string requestUri = $"https://{baseUrl}/data/2.5/weather?q={cityName},{state}&appid={apiKey}&units=metric";
 
-        Forecast apiResult = await _httpClient.GetFromJsonAsync<Forecast>(requestUri);
+        Forecast? apiResult = await _httpClient.GetFromJsonAsync<Forecast>(requestUri);
+
+        if (apiResult is null)
+        {
+            throw new Exception("Failed to retrieve weather data");
+        }
 
         CurrentWeatherModel curWeather = new()
         {

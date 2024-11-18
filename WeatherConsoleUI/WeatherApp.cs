@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using WeatherConsoleUI.Models;
 using WeatherConsoleUI.Services;
 
@@ -55,7 +54,8 @@ public class WeatherApp : IHostedService
     public async Task ExecuteAsync()
     {
         CurrentWeatherModel curWeather = await _currentWeatherService.GetCurrentWeatherAsync("Center Moriches", "New York");
-        _logger.LogInformation("{message}", JsonSerializer.Serialize(curWeather, new JsonSerializerOptions { WriteIndented = true }));
+        JsonSerializerOptions options = new() { WriteIndented = true };
+        _logger.LogInformation("{message}", JsonSerializer.Serialize(curWeather, options));
         _logger.LogInformation("Press any key to exit...");
         Console.ReadLine();
     }

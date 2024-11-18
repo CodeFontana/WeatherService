@@ -18,10 +18,18 @@ using HttpResponseMessage response = await client.SendAsync(request);
 
 if (response.IsSuccessStatusCode)
 {
-    object body = await response.Content.ReadFromJsonAsync<object>();
-    Console.WriteLine(JsonSerializer.Serialize<object>(body, new JsonSerializerOptions { WriteIndented = true }));
+    object? result = await response.Content.ReadFromJsonAsync<object>();
+
+    if (result is null)
+    {
+        Console.WriteLine($"Failed to retrieve weather data for City={city} and State={state}");
+        return;
+    }
+
+    JsonSerializerOptions options = new() { WriteIndented = true };
+    Console.WriteLine(JsonSerializer.Serialize(result, options));
 }
 else
 {
-    Console.WriteLine($"Request failed[{ response.StatusCode }]: { response.ReasonPhrase }");
+    Console.WriteLine($"Request failed[{response.StatusCode}]: {response.ReasonPhrase}");
 }
