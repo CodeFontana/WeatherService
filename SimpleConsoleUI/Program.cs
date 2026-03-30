@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 
-string apiKey = "<API key from openweathermap.org>";
+string apiKey = "6cb804580cbb60e243edce26b0d516bf";
 string city = "Center Moriches";
 string state = "New York";
 
@@ -33,3 +33,6 @@ else
 {
     Console.WriteLine($"Request failed[{response.StatusCode}]: {response.ReasonPhrase}");
 }
+
+Console.WriteLine("\nPress any key to exit...");
+Console.ReadKey(true);   // or Console.ReadLine();

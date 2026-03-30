@@ -30,7 +30,7 @@ public class WeatherApp : IHostedService
         {
             try
             {
-                await Task.Yield(); // https://github.com/dotnet/runtime/issues/36063
+                await Task.Delay(500); // Brief delay for startup messages
                 await ExecuteAsync();
             }
             catch (Exception ex)

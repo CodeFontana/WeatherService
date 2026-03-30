@@ -1,10 +1,9 @@
 ﻿using System.Globalization;
-using WeatherServiceApp.Interfaces;
 using WeatherServiceApp.Models;
 
 namespace WeatherServiceApp.Services;
 
-public class CurrentWeatherService : ICurrentWeatherService
+public sealed class CurrentWeatherService : ICurrentWeatherService
 {
     private readonly IConfiguration _configuration;
     private readonly IHttpClientFactory _httpClientFactory;
@@ -20,28 +19,26 @@ public class CurrentWeatherService : ICurrentWeatherService
     private record Main(decimal Temp);
     private record CurrentWeather(Weather[] Weather, Main Main);
 
-    public async Task<CurrentWeatherResultModel> GetCurrentWeatherAsync(string city, string state = null)
+    public async Task<CurrentWeatherResultModel> GetCurrentWeatherAsync(string city, string? state = null)
     {
-        string apiKey = _configuration.GetValue<string>("OpenWeatherMap:ApiKey");
-        string requestUri;
-
-        if (string.IsNullOrWhiteSpace(state))
-        {
-            requestUri = $"weather?q={city}&appid={apiKey}&units=metric";
-        }
-        else
-        {
-            requestUri = $"weather?q={city},{state}&appid={apiKey}&units=metric";
-        }
+        string? apiKey = _configuration.GetValue<string>("OpenWeatherMap:ApiKey")
+            ?? throw new InvalidOperationException("OpenWeatherMap API key is not configured.");
+        
+        string requestUri = state switch {
+             _ when string.IsNullOrWhiteSpace(state) => $"weather?q={city}&appid={apiKey}&units=metric",
+             _ => $"weather?q={city},{state}&appid={apiKey}&units=metric"
+        };
 
         HttpClient http = _httpClientFactory.CreateClient("currentWeather");
-        CurrentWeather result = await http.GetFromJsonAsync<CurrentWeather>(requestUri);
+        CurrentWeather? result = await http.GetFromJsonAsync<CurrentWeather>(requestUri)
+            ?? throw new InvalidOperationException("Failed to retrieve current weather data.");
+        
         TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
         CurrentWeatherResultModel curWeather = new()
         {
             TemperatureC = Math.Round(result.Main.Temp),
             TemperatureF = 32 + Math.Round(result.Main.Temp / (decimal)0.5556, 0),
-            Summary = textInfo.ToTitleCase(result.Weather[0]?.Description)
+            Summary = textInfo.ToTitleCase(result.Weather[0]?.Description ?? "No description")
         };
 
         return curWeather;
