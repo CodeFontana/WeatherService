@@ -25,6 +25,8 @@
         <button class="btn btn-primary mt-3" type="submit">Submit</button>
 
     </EditForm>
+
+    <Notification Class="my-2" @ref="_notification" />
 </div>
 
 @if (_result is not null)
@@ -54,9 +56,22 @@
 @code {
     private CurrentWeatherRequestModel _request = new();
     private CurrentWeatherResultModel? _result = null;
+    private Notification? _notification;
 
     private async Task HandleValidSubmit()
     {
-        _result = await ForecastService.GetCurrentWeatherAsync(_request.City, _request.State);
+        try
+        {
+            _result = await ForecastService.GetCurrentWeatherAsync(_request.City, _request.State);
+        }
+        catch (Exception ex)
+        {
+            _result = null;
+            
+            if (_notification is not null)
+            {
+                _notification.AlertError($"An error occurred while fetching weather data: {ex.Message}");
+            }
+        }
     }
 }
