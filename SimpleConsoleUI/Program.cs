@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 
-string apiKey = "6cb804580cbb60e243edce26b0d516bf";
+string apiKey = "<YOUR API key here>";
 string city = "Center Moriches";
 string state = "New York";
 
